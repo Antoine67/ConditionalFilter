@@ -13,11 +13,11 @@ namespace AdvFilterTest
     }
 
 
-    public class Function : IFunction
+    public abstract class Function : IFunction
     {
-        protected object[] parameters;
-        int level;
-        private Function[] children;
+        public readonly object[] parameters;
+        public readonly int level;
+        public readonly Function[] children;
 
         public Function(int level, object[] parameters, Function[] children)
         {
@@ -37,10 +37,48 @@ namespace AdvFilterTest
 
             string childrenSeparator = $"\n{tabs}- " ;
 
-            return 
-                $"[{this.GetType().Name}][LV:{level}] " +
-                $"params : {string.Join(" / ", parameters)} " +
-                $"{(children != null ? "children :"+ childrenSeparator + string.Join(childrenSeparator, children.Select(x=>x.ToString())) : null)}";
+            string toStr = $"[{this.GetType().Name}][LV:{level}] ";
+
+            //Si l'object contient des enfants on les affiche
+            //Les paramètres ne sont pas utilisés dans ce cas
+            if(children != null)
+            {
+                toStr += $"{"children :" + childrenSeparator + string.Join(childrenSeparator, children.Select(x => x.ToString()))}";
+            }
+            else
+            {
+                toStr += $"params : {string.Join(" / ", parameters)} ";
+            }
+
+            return toStr;
+        }
+
+        //TODO Laisser chaque fonction implémenter sa propre fonction Build
+        //public abstract string Build();
+
+        public string DefaultBuild()
+        {
+            return DefaultBuild(this);
+        }
+
+
+        //Uniquement pour la démo : a remplacer avec des clauses SQL, ...
+        private static string DefaultBuild(Function fcEl, string query = "")
+        {
+            if (fcEl.children != null)
+            {
+                query += $"{fcEl.GetType().Name} [ ";
+                foreach (var chi in fcEl.children)
+                {
+                    query += DefaultBuild(chi) + " ";
+                }
+                query += " ] ";
+            }
+            else
+            {
+                query += $"{fcEl.GetType().Name} [ { string.Join(", ", fcEl.parameters.Select(x => x.ToString()).ToArray()) } ] ";
+            }
+            return query.ToString();
         }
     }
 

@@ -15,23 +15,17 @@ namespace AdvFilterTest
             this.str = str;
         }
 
-        public void Parse()
+        public Function Parse()
         {
 
-            var n = ParseValue(str);
-            //Print(n);
+            var rootElement = ParseValue(str);
+            //System.Diagnostics.Debug.WriteLine(rootElement);
+            return rootElement;
 
         }
 
-        private void Print(params object[] en)
-        {
-            foreach(var e in en)
-            {
-                System.Diagnostics.Debug.WriteLine(e);
-            }
-        }
 
-        private static IFunction ParseValue(string value)
+        private static Function ParseValue(string value)
         {
             if (string.IsNullOrEmpty(value))
                 throw new Exception("Empty value");
@@ -46,6 +40,15 @@ namespace AdvFilterTest
             {
                 char ch = value[i];
 
+                //Si le caractère est échappé on l'ignore
+                if(ch == '\\')
+                {
+                    i++;
+                    continue;
+                }
+
+                //Si le caractère est une parenthèse ouvrante ou fermante
+                //On l'ajoute ou le supprime de la stack
                 if (ch == '(')
                     parenthesis.Push(i);
                 else if (ch == ')')
@@ -59,10 +62,11 @@ namespace AdvFilterTest
                     var funcName = GetFunctionName(value.Substring(0, openBracket));
                     //System.Diagnostics.Debug.WriteLine($"[~{funcName}~]");
 
-
                     levelChildren.TryGetValue(level +1, out var children);
                     var newFunc = Functions.GetFunction(funcName, level, expressi.Split(','), children != null ? children.ToArray() : null);
-                    if(level == 1) rootFunction = newFunc; // On garde la référence de l'élement root, qui contient tous les enfants
+
+                    // On garde la référence de l'élement root, qui contient tous les enfants
+                    if (level == 1) rootFunction = newFunc; 
 
                     if(!levelChildren.ContainsKey(level))
                     {
@@ -112,7 +116,7 @@ namespace AdvFilterTest
                     
             }
             if (index < 0) return string.Empty;
-            return expr.Substring(index, expr.Length - index);
+            return expr.Substring(index, expr.Length - index).Replace(" ","");
         }
     }
 
