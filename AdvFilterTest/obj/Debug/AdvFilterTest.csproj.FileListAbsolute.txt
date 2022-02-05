@@ -1,0 +1,7 @@
+D:\Repos\AdvFilterTest\AdvFilterTest\bin\Debug\AdvFilterTest.exe.config
+D:\Repos\AdvFilterTest\AdvFilterTest\bin\Debug\AdvFilterTest.exe
+D:\Repos\AdvFilterTest\AdvFilterTest\bin\Debug\AdvFilterTest.pdb
+D:\Repos\AdvFilterTest\AdvFilterTest\obj\Debug\AdvFilterTest.csprojAssemblyReference.cache
+D:\Repos\AdvFilterTest\AdvFilterTest\obj\Debug\AdvFilterTest.csproj.CoreCompileInputs.cache
+D:\Repos\AdvFilterTest\AdvFilterTest\obj\Debug\AdvFilterTest.exe
+D:\Repos\AdvFilterTest\AdvFilterTest\obj\Debug\AdvFilterTest.pdb
